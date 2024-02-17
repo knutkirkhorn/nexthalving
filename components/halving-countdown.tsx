@@ -39,7 +39,6 @@ export async function HalvingCountdown() {
 	);
 	const blockHeight = await blockHeightResponse.json();
 	const timeUntilHalving = calculateTimeUntilHalving(blockHeight.height);
-	console.log('calculateTimeUntilHalving(blockHeight', timeUntilHalving);
 
 	return (
 		<div className="grid gap-2 text-4xl font-bold sm:grid-flow-col sm:gap-4">
