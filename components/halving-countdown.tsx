@@ -14,6 +14,7 @@ function TimePart({time, label}: {time: number; label: string}) {
 
 const blocksBetweenHalvings = 210_000;
 const averageBlockTime = 600;
+const secondsInYear = 31_536_000;
 const secondsInDay = 86_400;
 const secondsInHour = 3600;
 
@@ -21,14 +22,15 @@ function calculateTimeUntilHalving(currentBlockHeight: number) {
 	const blocksUntilHalving =
 		blocksBetweenHalvings - (currentBlockHeight % blocksBetweenHalvings);
 	const secondsUntilHalving = blocksUntilHalving * averageBlockTime;
-	const days = Math.floor(secondsUntilHalving / secondsInDay);
+	const years = Math.floor(secondsUntilHalving / secondsInYear);
+	const days = Math.floor((secondsUntilHalving % secondsInYear) / secondsInDay);
 	const hours = Math.floor(
 		(secondsUntilHalving % secondsInDay) / secondsInHour,
 	);
 	const minutes = Math.floor((secondsUntilHalving % secondsInHour) / 60);
 	const seconds = Math.floor(secondsUntilHalving % 60);
 
-	return {days, hours, minutes, seconds};
+	return {years, days, hours, minutes, seconds};
 }
 
 export async function HalvingCountdown() {
@@ -42,6 +44,7 @@ export async function HalvingCountdown() {
 
 	return (
 		<div className="grid gap-2 text-4xl font-bold sm:grid-flow-col sm:gap-4">
+			<TimePart time={timeUntilHalving.years} label="years" />
 			<TimePart time={timeUntilHalving.days} label="days" />
 			<TimePart time={timeUntilHalving.hours} label="hours" />
 			<TimePart time={timeUntilHalving.minutes} label="minutes" />
